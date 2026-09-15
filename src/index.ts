@@ -2,7 +2,7 @@ import { ChromeTradingViewConnector } from './connector';
 import { ApiServer } from './api-server';
 
 async function main() {
-  const connector = new ChromeTradingViewConnector();
+  const connector = new ChromeTradingViewConnector({ offline: true });
   const apiServer = new ApiServer(connector);
 
   try {

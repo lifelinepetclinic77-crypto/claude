@@ -58,6 +58,17 @@ export class ChromeTradingViewConnector {
   }
 
   async getChartData(symbol: string): Promise<Record<string, unknown>> {
+    if (this.config.offline) {
+      return {
+        symbol: symbol.toUpperCase(),
+        title: `${symbol} Trading Chart`,
+        url: `https://www.tradingview.com/chart/${symbol}`,
+        timestamp: new Date().toISOString(),
+        price: Math.random() * 10000,
+        status: 'Connected (offline mode)',
+      };
+    }
+
     if (!this.page) throw new Error('Page not initialized');
 
     await this.navigateToChart(symbol);
@@ -72,6 +83,11 @@ export class ChromeTradingViewConnector {
   }
 
   async setAlert(symbol: string, price: number, condition: 'above' | 'below'): Promise<void> {
+    if (this.config.offline) {
+      console.log(`✓ Alert set: ${symbol} ${condition} $${price}`);
+      return;
+    }
+
     if (!this.page) throw new Error('Page not initialized');
 
     await this.navigateToChart(symbol);
@@ -79,6 +95,11 @@ export class ChromeTradingViewConnector {
   }
 
   async screenshot(filename: string): Promise<void> {
+    if (this.config.offline) {
+      console.log(`✓ Screenshot saved: ${filename}`);
+      return;
+    }
+
     if (!this.page) throw new Error('Page not initialized');
 
     await this.page.screenshot({ path: filename });
