@@ -12,7 +12,11 @@ export class ChromeTradingViewConnector {
   private page: Page | null = null;
   private config: TradingViewConfig;
   private connected: boolean = false;
-  private watchlist: string[] = ['ABB', 'BTCUSD', 'ETHUSDT', 'GOOGL', 'AAPL', 'MSFT', 'TSLA'];
+  private watchlist: string[] = [
+    'ABB', 'BTCUSD', 'ETHUSDT', 'GOOGL', 'AAPL', 'MSFT', 'NVDA', 'AMZN',
+    'IDCF', '3600I', 'CIPLA', 'INDHC', 'LODH', 'MARU', 'TATAC', 'TMPV',
+    'HERO', 'LICHS', 'POLYC', 'INDUS', 'MAXH'
+  ];
 
   constructor(config: TradingViewConfig = {}) {
     this.config = {
