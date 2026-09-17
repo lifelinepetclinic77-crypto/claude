@@ -12,11 +12,7 @@ export class ChromeTradingViewConnector {
   private page: Page | null = null;
   private config: TradingViewConfig;
   private connected: boolean = false;
-  private watchlist: string[] = [
-    'ABB', 'BTCUSD', 'ETHUSDT', 'GOOGL', 'AAPL', 'MSFT', 'NVDA', 'AMZN',
-    'IDCF', '3600I', 'CIPLA', 'INDHC', 'LODH', 'MARU', 'TATAC', 'TMPV',
-    'HERO', 'LICHS', 'POLYC', 'INDUS', 'MAXH'
-  ];
+  private watchlist: string[] = this.generateWatchlist();
 
   constructor(config: TradingViewConfig = {}) {
     this.config = {
@@ -146,5 +142,44 @@ export class ChromeTradingViewConnector {
     const upperSymbol = symbol.toUpperCase();
     this.watchlist = this.watchlist.filter(s => s !== upperSymbol);
     console.log(`Removed ${upperSymbol} from watchlist`);
+  }
+
+  private generateWatchlist(): string[] {
+    const indianStocks = [
+      'ABB', 'IDCF', '3600I', 'CIPLA', 'INDHC', 'LODH', 'MARU', 'TATAC', 'TMPV',
+      'HERO', 'LICHS', 'POLYC', 'INDUS', 'MAXH', 'TCS', 'INFY', 'WIPRO', 'HCL',
+      'RELIANCE', 'HDFC', 'ICICI', 'AXIS', 'SBIN', 'KOTAK', 'BAJAJ', 'LT',
+      'MARUTI', 'HYUNDAI', 'TATA', 'MAHINDRA', 'ASHOK', 'EICHER', 'BOSCH',
+      'BAJAJFINSV', 'SBILIFE', 'ICICIPRU', 'HDFLBANK', 'INDUSIND', 'FEDERALBNK',
+      'IDFCBANK', 'YESBANK', 'NUVOCO', 'CEMENT', 'SHREE', 'AMBUJACEM', 'LAFARGEIND',
+      'GRASIM', 'JSWSTEEL', 'SAIL', 'TATASTEEL', 'HINDALCO', 'NALCO', 'VEDL',
+      'JINDALSTEL', 'HCLTECH', 'TECHM', 'LTIM', 'KPIT', 'CADILA', 'SUNPHARMA',
+      'DRREDDY', 'LUPIN', 'TORNTPHARM', 'ALKEM', 'GLENMARK', 'IPCA', 'AUPHARM',
+      'VOLTAS', 'BLUESTARCO', 'LTTS', 'PERSISTENT', 'MPHASIS', 'RBLBANK', 'ICICIPRULI',
+      'GODREJIND', 'GODREJPROP', 'DLF', 'LODHA', 'SOBHA', 'PRESTIGE', 'MACROTECH',
+      'APITECH', 'THAPAR', 'SHYAMTEL', 'SYMPHONY', 'CROMPTON', 'BGRENERGY', 'ADANIGREEN',
+      'ADANIPOWER', 'ADANITRANS', 'ADANIPORTS', 'ADANIENSOL', 'NTPC', 'POWERGRID', 'TORRECORP',
+      'MAZDA', 'FORD', 'M_MFIN', 'BAJAJFINSV', 'MANAPPURAM', 'CHOLAFIN', 'SPORTSFLX',
+      'GRAIL', 'NYKAA', 'FSL', 'UPL', 'SUMICHEM', 'EVOQNETS', 'FINTECH', 'NEWTECH'
+    ];
+
+    const globalStocks = [
+      'BTCUSD', 'ETHUSDT', 'GOOGL', 'AAPL', 'MSFT', 'NVDA', 'AMZN', 'TESLA', 'META',
+      'NETFLIX', 'ADOBE', 'NFLX', 'PAYPAL', 'INTC', 'AMD', 'QUALCOMM', 'BROADCOM',
+      'CISCO', 'ORACLE', 'SAP', 'IBM', 'HPE', 'DELL', 'ZOOM', 'SHOPIFY', 'AIRBNB',
+      'UBER', 'LYFT', 'DOCUSIGN', 'SQUARE', 'STRIPE', 'COINBASE', 'TWILIO', 'SENTINELONE'
+    ];
+
+    return [...indianStocks, ...globalStocks];
+  }
+
+  getPortfolioStats(): Record<string, unknown> {
+    const stats = {
+      totalStocks: this.watchlist.length,
+      indianStocks: this.watchlist.filter(s => !['BTCUSD', 'ETHUSDT', 'GOOGL', 'AAPL', 'MSFT', 'NVDA', 'AMZN', 'TESLA', 'META', 'NETFLIX', 'ADOBE', 'NFLX', 'PAYPAL', 'INTC', 'AMD', 'QUALCOMM', 'BROADCOM', 'CISCO', 'ORACLE', 'SAP', 'IBM', 'HPE', 'DELL', 'ZOOM', 'SHOPIFY', 'AIRBNB', 'UBER', 'LYFT', 'DOCUSIGN', 'SQUARE', 'STRIPE', 'COINBASE', 'TWILIO', 'SENTINELONE'].includes(s)).length,
+      globalStocks: this.watchlist.filter(s => ['BTCUSD', 'ETHUSDT', 'GOOGL', 'AAPL', 'MSFT', 'NVDA', 'AMZN', 'TESLA', 'META', 'NETFLIX', 'ADOBE', 'NFLX', 'PAYPAL', 'INTC', 'AMD', 'QUALCOMM', 'BROADCOM', 'CISCO', 'ORACLE', 'SAP', 'IBM', 'HPE', 'DELL', 'ZOOM', 'SHOPIFY', 'AIRBNB', 'UBER', 'LYFT', 'DOCUSIGN', 'SQUARE', 'STRIPE', 'COINBASE', 'TWILIO', 'SENTINELONE'].includes(s)).length,
+      timestamp: new Date().toISOString(),
+    };
+    return stats;
   }
 }
