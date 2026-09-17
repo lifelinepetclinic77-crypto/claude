@@ -63,6 +63,42 @@ export class ApiServer {
         timestamp: new Date().toISOString(),
       });
     });
+
+    this.app.get('/watchlist', (req: Request, res: Response) => {
+      const watchlist = this.connector.getWatchlist();
+      res.json({
+        success: true,
+        count: watchlist.length,
+        stocks: watchlist,
+        timestamp: new Date().toISOString(),
+      });
+    });
+
+    this.app.post('/watchlist/add', (req: Request, res: Response) => {
+      try {
+        const { symbol } = req.body;
+        if (!symbol) {
+          return res.status(400).json({ error: 'Symbol required' });
+        }
+        this.connector.addToWatchlist(symbol);
+        res.json({ success: true, message: `Added ${symbol}` });
+      } catch (error) {
+        res.status(500).json({ success: false, error: String(error) });
+      }
+    });
+
+    this.app.post('/watchlist/remove', (req: Request, res: Response) => {
+      try {
+        const { symbol } = req.body;
+        if (!symbol) {
+          return res.status(400).json({ error: 'Symbol required' });
+        }
+        this.connector.removeFromWatchlist(symbol);
+        res.json({ success: true, message: `Removed ${symbol}` });
+      } catch (error) {
+        res.status(500).json({ success: false, error: String(error) });
+      }
+    });
   }
 
   async start(): Promise<void> {

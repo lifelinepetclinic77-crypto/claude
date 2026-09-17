@@ -12,6 +12,7 @@ export class ChromeTradingViewConnector {
   private page: Page | null = null;
   private config: TradingViewConfig;
   private connected: boolean = false;
+  private watchlist: string[] = ['ABB', 'BTCUSD', 'ETHUSDT', 'GOOGL', 'AAPL', 'MSFT', 'TSLA'];
 
   constructor(config: TradingViewConfig = {}) {
     this.config = {
@@ -123,5 +124,23 @@ export class ChromeTradingViewConnector {
 
   isConnected(): boolean {
     return this.connected || (this.browser !== null && this.page !== null);
+  }
+
+  getWatchlist(): string[] {
+    return this.watchlist;
+  }
+
+  addToWatchlist(symbol: string): void {
+    const upperSymbol = symbol.toUpperCase();
+    if (!this.watchlist.includes(upperSymbol)) {
+      this.watchlist.push(upperSymbol);
+      console.log(`Added ${upperSymbol} to watchlist`);
+    }
+  }
+
+  removeFromWatchlist(symbol: string): void {
+    const upperSymbol = symbol.toUpperCase();
+    this.watchlist = this.watchlist.filter(s => s !== upperSymbol);
+    console.log(`Removed ${upperSymbol} from watchlist`);
   }
 }
