@@ -59,12 +59,20 @@ export class ChromeTradingViewConnector {
 
   async getChartData(symbol: string): Promise<Record<string, unknown>> {
     if (this.config.offline) {
+      const currentPrice = Math.random() * 10000;
+      const openPrice = Math.random() * 10000;
+      const pnl = currentPrice - openPrice;
+      const pnlPercent = ((pnl / openPrice) * 100).toFixed(2);
+
       return {
         symbol: symbol.toUpperCase(),
         title: `${symbol} Trading Chart`,
         url: `https://www.tradingview.com/chart/${symbol}`,
         timestamp: new Date().toISOString(),
-        price: Math.random() * 10000,
+        price: currentPrice.toFixed(2),
+        openPrice: openPrice.toFixed(2),
+        pnl: pnl.toFixed(2),
+        pnlPercent: parseFloat(pnlPercent),
         status: 'Connected (offline mode)',
       };
     }
